@@ -13,8 +13,11 @@ namespace MohawkGame2D
     {
         public Vector2 position;
         public Vector2 velocity;
+
         public Vector2 gravity;
         Vector2 bombVelocity = new Vector2(0, 0);
+
+        float bombSpeed = 300.0f;
 
 
         public void Setup()
@@ -24,15 +27,21 @@ namespace MohawkGame2D
 
         public void Update() 
         {
-            BombGravity();
+            ProcessBombPhysics();
+            //BombGravity();
             DrawBomb();
         }
 
-        public void BombGravity()
+        void ProcessBombPhysics()
+        {
+            position += bombSpeed * bombVelocity * Time.DeltaTime;
+        }
+
+        void BombGravity()
         { 
             bombVelocity += gravity * Time.DeltaTime;
         }
-        public void DrawBomb()
+        void DrawBomb()
         {
             Draw.LineSize = 2;
             Draw.LineColor = Color.Black;

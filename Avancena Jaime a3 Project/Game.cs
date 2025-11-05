@@ -1,4 +1,5 @@
 ﻿// Include the namespaces (code libraries) you need below.
+using Raylib_cs;
 using System;
 using System.Numerics;
 
@@ -32,6 +33,8 @@ namespace MohawkGame2D
         {
             Window.ClearBackground(Color.LightGray);
 
+            if (Input.IsMouseButtonPressed(MouseInput.Left)) spawnBomb();
+
             for (int i = 0; i < bombs.Length; i++)
             {
                 if (bombs[i] == null) continue;
@@ -41,7 +44,19 @@ namespace MohawkGame2D
 
         void spawnBomb()
         {
-            
+            Bomb bomb = new Bomb();
+
+            Vector2 bombSpawn = new Vector2(100, 450);
+
+            bomb.position = bombSpawn;
+
+            Vector2 spawnToMouse = Input.GetMousePosition() - bombSpawn;
+            bomb.velocity = Vector2.Normalize(spawnToMouse);
+
+            bombs[BombIndex] = bomb;
+            BombIndex++;
+
+            if (BombIndex >= bombs.Length) BombIndex = 0;
         }
     }
 
