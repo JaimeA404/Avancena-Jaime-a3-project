@@ -16,13 +16,15 @@ namespace MohawkGame2D
         Bomb[] bombs = new Bomb[100];
         int BombIndex = 0;
 
+        Vector2 aimPosition = new Vector2 (200,200);
+
         /// <summary>
         ///     Setup runs once before the game loop begins.
         /// </summary>
         public void Setup()
         {
             Window.SetTitle("Bombs Away");
-            Window.SetSize(800, 600);
+            Window.SetSize(800, 400);
             Window.TargetFPS = 60;
         }
 
@@ -31,9 +33,35 @@ namespace MohawkGame2D
         /// </summary>
         public void Update()
         {
-            Window.ClearBackground(Color.LightGray);
+            Window.ClearBackground(Color.OffWhite);
 
-            if (Input.IsMouseButtonPressed(MouseInput.Left)) spawnBomb();
+            //WASD and arrow keys to control
+
+            if (Input.IsKeyboardKeyDown(KeyboardInput.W))
+            {
+                aimPosition.Y -= 5;
+            }
+
+            if (Input.IsKeyboardKeyDown(KeyboardInput.S))
+            {
+                aimPosition.Y += 5;
+            }
+            if (Input.IsKeyboardKeyDown(KeyboardInput.A))
+            {
+                aimPosition.X -= 5;
+            }
+            if (Input.IsKeyboardKeyDown(KeyboardInput.D))
+            {
+                aimPosition.X += 5;
+            }
+
+            Draw.LineSize = 5;
+            Draw.Line(100, 300, aimPosition.X, aimPosition.Y);
+
+            if (Input.IsKeyboardKeyPressed(KeyboardInput.Space))
+            {
+                spawnBomb();
+            }
 
             for (int i = 0; i < bombs.Length; i++)
             {
@@ -46,11 +74,11 @@ namespace MohawkGame2D
         {
             Bomb bomb = new Bomb();
 
-            Vector2 bombSpawn = new Vector2(100, 450);
+            Vector2 bombSpawn = new Vector2(100, 300);
 
             bomb.position = bombSpawn;
 
-            Vector2 spawnToMouse = Input.GetMousePosition() - bombSpawn;
+            Vector2 spawnToMouse = aimPosition - bombSpawn;
             bomb.velocity = Vector2.Normalize(spawnToMouse);
 
             bombs[BombIndex] = bomb;

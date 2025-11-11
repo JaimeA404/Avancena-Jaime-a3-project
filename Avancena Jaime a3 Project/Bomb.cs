@@ -1,5 +1,4 @@
-﻿using MohawkGame2D;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -14,8 +13,7 @@ namespace MohawkGame2D
         public Vector2 position;
         public Vector2 velocity;
 
-        public Vector2 gravity;
-        Vector2 bombVelocity = new Vector2(0, 0);
+        public Vector2 gravity = new Vector2(0,0.5f);
 
         float bombSpeed = 300.0f;
 
@@ -28,25 +26,29 @@ namespace MohawkGame2D
         public void Update() 
         {
             ProcessBombPhysics();
-            //BombGravity();
+            PublicGravity();
             DrawBomb();
         }
 
         void ProcessBombPhysics()
         {
-            position += bombSpeed * bombVelocity * Time.DeltaTime;
+            position += bombSpeed * velocity * Time.DeltaTime;
         }
 
-        void BombGravity()
-        { 
-            bombVelocity += gravity * Time.DeltaTime;
+        public void PublicGravity()
+        {
+            // Apply gravity
+            velocity += gravity * Time.DeltaTime;
+
+            // Update position
+            position.Y += velocity.Y * Time.DeltaTime;
         }
         void DrawBomb()
         {
             Draw.LineSize = 2;
-            Draw.LineColor = Color.Black;
             Draw.FillColor = Color.DarkGray;
-            Draw.Circle(position, 7);
+            Draw.LineColor = Color.Black;
+            Draw.Circle(position, 5);
 
         }
     }
