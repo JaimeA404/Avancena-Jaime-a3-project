@@ -16,7 +16,7 @@ namespace MohawkGame2D
         Bomb[] bombs = new Bomb[100];
         int BombIndex = 0;
 
-        Vector2 aimPosition = new Vector2 (200,200);
+        Vector2 aimPosition = new Vector2 (350,150);
 
         /// <summary>
         ///     Setup runs once before the game loop begins.
@@ -37,28 +37,30 @@ namespace MohawkGame2D
 
             //WASD and arrow keys to control
 
-            if (Input.IsKeyboardKeyDown(KeyboardInput.W))
+            if (Input.IsKeyboardKeyDown(KeyboardInput.W) || Input.IsKeyboardKeyDown(KeyboardInput.Up))
             {
                 aimPosition.Y -= 5;
             }
 
-            if (Input.IsKeyboardKeyDown(KeyboardInput.S))
+            if (Input.IsKeyboardKeyDown(KeyboardInput.S) || Input.IsKeyboardKeyDown(KeyboardInput.Down))
             {
                 aimPosition.Y += 5;
+                
+                //if (aimPosition.Y >= )
             }
-            if (Input.IsKeyboardKeyDown(KeyboardInput.A))
+            /*if (Input.IsKeyboardKeyDown(KeyboardInput.A) || Input.IsKeyboardKeyDown(KeyboardInput.Left))
             {
                 aimPosition.X -= 5;
             }
-            if (Input.IsKeyboardKeyDown(KeyboardInput.D))
+            if (Input.IsKeyboardKeyDown(KeyboardInput.D) || Input.IsKeyboardKeyDown(KeyboardInput.Right))
             {
                 aimPosition.X += 5;
-            }
+            }*/    // disabled x movement to keep trajectory line smaller
 
             Draw.LineSize = 5;
-            Draw.Line(100, 300, aimPosition.X, aimPosition.Y);
+            Draw.Line(100, 300, 150, aimPosition.Y);
 
-            if (Input.IsKeyboardKeyPressed(KeyboardInput.Space))
+            if (Input.IsKeyboardKeyPressed(KeyboardInput.Space) || Input.IsKeyboardKeyPressed(KeyboardInput.Enter))
             {
                 spawnBomb();
             }
@@ -78,8 +80,8 @@ namespace MohawkGame2D
 
             bomb.position = bombSpawn;
 
-            Vector2 spawnToMouse = aimPosition - bombSpawn;
-            bomb.velocity = Vector2.Normalize(spawnToMouse);
+            Vector2 bombTrajectory = aimPosition - bombSpawn;
+            bomb.velocity = Vector2.Normalize(bombTrajectory);
 
             bombs[BombIndex] = bomb;
             BombIndex++;

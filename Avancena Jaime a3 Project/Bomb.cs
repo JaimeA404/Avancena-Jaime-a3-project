@@ -13,9 +13,9 @@ namespace MohawkGame2D
         public Vector2 position;
         public Vector2 velocity;
 
-        public Vector2 gravity = new Vector2(0,0.5f);
+        public Vector2 gravity = new Vector2(0,0.75f);
 
-        float bombSpeed = 300.0f;
+        float bombSpeed = 450.0f;
 
 
         public void Setup()
@@ -26,7 +26,7 @@ namespace MohawkGame2D
         public void Update() 
         {
             ProcessBombPhysics();
-            PublicGravity();
+            BombGravity();
             DrawBomb();
         }
 
@@ -35,7 +35,7 @@ namespace MohawkGame2D
             position += bombSpeed * velocity * Time.DeltaTime;
         }
 
-        public void PublicGravity()
+        public void BombGravity()
         {
             // Apply gravity
             velocity += gravity * Time.DeltaTime;
