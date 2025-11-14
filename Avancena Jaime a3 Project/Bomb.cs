@@ -17,19 +17,32 @@ namespace MohawkGame2D
 
         float bombSpeed = 450.0f;
 
+        public int explosionDamage = 3;
+
 
         public void Setup()
         {
             
         }
 
-        public void Update() 
+        public void Update(Blocks[] blocks) 
         {
             ProcessBombPhysics();
             BombGravity();
             DrawBomb();
+            ProcessCollisions(blocks);
         }
-
+        void ProcessCollisions(Blocks[] blocks)
+        {
+            for (int i = 0; i < blocks.Length; i++)
+            {
+                Blocks buildingBlock = blocks[i];
+                if (position.X >= buildingBlock.left && position.X <= buildingBlock.right && position.Y >= buildingBlock.top && position.Y <= buildingBlock.bottom)
+                {
+                    buildingBlock.blockHealth -= explosionDamage;
+                }
+            }
+        }
         void ProcessBombPhysics()
         {
             position += bombSpeed * velocity * Time.DeltaTime;

@@ -13,10 +13,16 @@ namespace MohawkGame2D
     {
         // Place your variables here:
 
-        Bomb[] bombs = new Bomb[100];
+        //bomb variables
+        Bomb[] bombs = new Bomb[2];
         int BombIndex = 0;
 
-        Vector2 aimPosition = new Vector2 (350,150);
+        Vector2 aimPosition = new Vector2 (150,280);
+
+        bool canFire = true;
+        float fireCoolDown = 0.0f; // cooldown timer start
+
+        Blocks[] blocks = new Blocks[5];
 
         /// <summary>
         ///     Setup runs once before the game loop begins.
@@ -26,6 +32,8 @@ namespace MohawkGame2D
             Window.SetTitle("Bombs Away");
             Window.SetSize(800, 400);
             Window.TargetFPS = 60;
+
+            makeBuildings();
         }
 
         /// <summary>
@@ -60,16 +68,41 @@ namespace MohawkGame2D
             Draw.LineSize = 5;
             Draw.Line(100, 300, 150, aimPosition.Y);
 
-            if (Input.IsKeyboardKeyPressed(KeyboardInput.Space) || Input.IsKeyboardKeyPressed(KeyboardInput.Enter))
+            if (canFire == true && (Input.IsKeyboardKeyPressed(KeyboardInput.Space) ||  Input.IsKeyboardKeyPressed(KeyboardInput.Enter)))
             {
                 spawnBomb();
+                canFire = false;
+            }
+
+            // fire cooldown mechanic
+
+            if (canFire == false)
+            {
+                fireCoolDown += Time.DeltaTime;
+
+                if (fireCoolDown >= 3.0f)
+                {
+                    canFire = true;
+                    fireCoolDown = 0;
+                }
             }
 
             for (int i = 0; i < bombs.Length; i++)
             {
                 if (bombs[i] == null) continue;
-                bombs[i].Update();
+                bombs[i].Update(blocks);
             }
+
+            for (int i = 0; i < blocks.Length; i++)
+            {
+                if (blocks[i] == null) continue;
+                blocks[i].update();
+            }
+        }
+
+        void damageCalc()
+        {
+            
         }
 
         void spawnBomb()
@@ -87,6 +120,19 @@ namespace MohawkGame2D
             BombIndex++;
 
             if (BombIndex >= bombs.Length) BombIndex = 0;
+        }
+
+        void makeBuildings()
+        {
+            Vector2 basePosition = new Vector2(350, 275);
+            int blockCount = 5;
+
+            for (int i = 0; i < 5; i++)
+            {
+                Vector2 BlocksPos = new Vector2(basePosition.X, basePosition.Y - (i * 5));
+                blocks[i] = new Blocks(BlocksPos, new Vector2(5, 5));
+                blocks[i].setup();
+            }
         }
     }
 
